@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>Ui.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Ui.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">datetime </span><span class="s0">import </span><span class="s1">datetime</span><span class="s2">, </span><span class="s1">timedelta</span>
+
+
+<span class="s3"># def prompt_user(truck1, truck2, truck3, package_table):</span>
+<span class="s3">#     while True:</span>
+<span class="s3">#         print(&quot;\nYou can check the status of any truck by typing truck id (truck1, truck2, truck3).&quot;)</span>
+<span class="s3">#         print(&quot;You can also search for packages by ID by typing '(number)' where number is an integer&quot;</span>
+<span class="s3">#               &quot; between 1 and the total package count for today.&quot;)</span>
+<span class="s3">#         print(&quot;Or type 'go' to continue.&quot;)</span>
+<span class="s3">#         prompt = input('&gt; ')</span>
+<span class="s3">#         if prompt == 'truck1':</span>
+<span class="s3">#             print(truck1)</span>
+<span class="s3">#         elif prompt == 'truck2':</span>
+<span class="s3">#             print(truck2)</span>
+<span class="s3">#         elif prompt == 'truck3':</span>
+<span class="s3">#             print(truck3)</span>
+<span class="s3">#         elif prompt == 'go':</span>
+<span class="s3">#             break</span>
+<span class="s3">#         elif 0 &lt; int(prompt) &lt; package_table.size:</span>
+<span class="s3">#             print(package_table.get_package(int(prompt)))</span>
+<span class="s3">#         else:</span>
+<span class="s3">#             print('Unknown response')</span>
+
+
+<span class="s0">def </span><span class="s1">time_query_all_packages</span><span class="s2">(</span><span class="s1">truck1</span><span class="s2">, </span><span class="s1">truck2</span><span class="s2">, </span><span class="s1">truck3</span><span class="s2">):</span>
+    <span class="s1">print</span><span class="s2">(</span><span class="s4">'Enter any time (format &quot;HH:MM&quot;) to check the status of packages on each truck at that timestamp'</span><span class="s2">)</span>
+    <span class="s1">prompt </span><span class="s2">= </span><span class="s1">input</span><span class="s2">(</span><span class="s4">'&gt; '</span><span class="s2">)</span>
+    <span class="s0">try</span><span class="s2">:</span>
+        <span class="s1">time_format </span><span class="s2">= </span><span class="s4">&quot;%H:%M&quot;</span>
+        <span class="s1">time_object </span><span class="s2">= </span><span class="s1">datetime</span><span class="s2">.</span><span class="s1">strptime</span><span class="s2">(</span><span class="s1">prompt</span><span class="s2">, </span><span class="s1">time_format</span><span class="s2">)</span>
+        <span class="s1">time_delta </span><span class="s2">= </span><span class="s1">timedelta</span><span class="s2">(</span><span class="s1">hours</span><span class="s2">=</span><span class="s1">time_object</span><span class="s2">.</span><span class="s1">hour</span><span class="s2">, </span><span class="s1">minutes</span><span class="s2">=</span><span class="s1">time_object</span><span class="s2">.</span><span class="s1">minute</span><span class="s2">)</span>
+        <span class="s0">if </span><span class="s1">time_delta </span><span class="s2">&lt; </span><span class="s1">timedelta</span><span class="s2">(</span><span class="s1">hours</span><span class="s2">=</span><span class="s5">8</span><span class="s2">):</span>
+            <span class="s1">print</span><span class="s2">(</span><span class="s4">&quot;Error: The operation does not start until 08:00&quot;</span><span class="s2">)</span>
+            <span class="s0">return</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">f&quot;Displaying all packages at timestamp </span><span class="s0">{</span><span class="s1">prompt</span><span class="s0">}</span><span class="s4">&quot;</span><span class="s2">)</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">&quot;Truck 1 packages:&quot;</span><span class="s2">)</span>
+        <span class="s0">for </span><span class="s1">package </span><span class="s0">in </span><span class="s1">truck1</span><span class="s2">.</span><span class="s1">truck_packages</span><span class="s2">:   </span><span class="s3"># O(n)</span>
+            <span class="s1">print</span><span class="s2">(</span><span class="s1">package</span><span class="s2">.</span><span class="s1">get_status</span><span class="s2">(</span><span class="s1">time_delta</span><span class="s2">))</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">&quot;Truck 2 packages:&quot;</span><span class="s2">)</span>
+        <span class="s0">for </span><span class="s1">package </span><span class="s0">in </span><span class="s1">truck2</span><span class="s2">.</span><span class="s1">truck_packages</span><span class="s2">:   </span><span class="s3"># O(n)</span>
+            <span class="s1">print</span><span class="s2">(</span><span class="s1">package</span><span class="s2">.</span><span class="s1">get_status</span><span class="s2">(</span><span class="s1">time_delta</span><span class="s2">))</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">&quot;Truck 3 packages:&quot;</span><span class="s2">)</span>
+        <span class="s0">for </span><span class="s1">package </span><span class="s0">in </span><span class="s1">truck3</span><span class="s2">.</span><span class="s1">truck_packages</span><span class="s2">:   </span><span class="s3"># O(n)</span>
+            <span class="s1">print</span><span class="s2">(</span><span class="s1">package</span><span class="s2">.</span><span class="s1">get_status</span><span class="s2">(</span><span class="s1">time_delta</span><span class="s2">))</span>
+    <span class="s0">except </span><span class="s1">ValueError</span><span class="s2">:</span>
+        <span class="s1">print</span><span class="s2">(</span><span class="s4">&quot;Error: invalid input&quot;</span><span class="s2">)</span>
+</pre>
+</body>
+</html>

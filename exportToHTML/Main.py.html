@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>Main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #2aacb8;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">datetime </span><span class="s0">import </span><span class="s1">timedelta</span><span class="s2">, </span><span class="s1">datetime</span>
+<span class="s0">import </span><span class="s1">time</span>
+<span class="s0">import </span><span class="s1">Ui</span>
+<span class="s0">from </span><span class="s1">Classes</span><span class="s2">.</span><span class="s1">Distance </span><span class="s0">import </span><span class="s1">Distance</span>
+<span class="s0">from </span><span class="s1">Classes</span><span class="s2">.</span><span class="s1">HashTable </span><span class="s0">import </span><span class="s1">HashTable</span>
+<span class="s0">from </span><span class="s1">Classes</span><span class="s2">.</span><span class="s1">Package </span><span class="s0">import </span><span class="s1">DeliveryStatus</span>
+<span class="s0">from </span><span class="s1">Classes</span><span class="s2">.</span><span class="s1">Truck </span><span class="s0">import </span><span class="s1">Truck</span>
+
+
+<span class="s3"># Reads Package file and populates HashTable with Package objects</span>
+<span class="s1">package_table </span><span class="s2">= </span><span class="s1">HashTable</span><span class="s2">()</span>
+<span class="s1">package_table</span><span class="s2">.</span><span class="s1">read_package_data</span><span class="s2">()   </span><span class="s3"># O(n) time complexity</span>
+
+<span class="s3"># Reads the Distance file and populates the 'distance_data' table and 'address_data' list</span>
+<span class="s1">distance_table </span><span class="s2">= </span><span class="s1">Distance</span><span class="s2">()</span>
+<span class="s1">distance_table</span><span class="s2">.</span><span class="s1">read_distance_data</span><span class="s2">()  </span><span class="s3"># O(n) time complexity</span>
+<span class="s1">distance_table</span><span class="s2">.</span><span class="s1">read_address_data</span><span class="s2">()  </span><span class="s3"># O(n) time complexity</span>
+
+<span class="s3"># Creates 3 Truck objects with their timers set to 8:00 am</span>
+<span class="s1">truck1 </span><span class="s2">= </span><span class="s1">Truck</span><span class="s2">(</span><span class="s4">8</span><span class="s2">, </span><span class="s4">0</span><span class="s2">, </span><span class="s4">0</span><span class="s2">, </span><span class="s5">'Truck 1'</span><span class="s2">)</span>
+<span class="s1">truck2 </span><span class="s2">= </span><span class="s1">Truck</span><span class="s2">(</span><span class="s4">8</span><span class="s2">, </span><span class="s4">0</span><span class="s2">, </span><span class="s4">0</span><span class="s2">, </span><span class="s5">'Truck 2'</span><span class="s2">)</span>
+<span class="s1">truck3 </span><span class="s2">= </span><span class="s1">Truck</span><span class="s2">(</span><span class="s4">8</span><span class="s2">, </span><span class="s4">0</span><span class="s2">, </span><span class="s4">0</span><span class="s2">, </span><span class="s5">'Truck 3'</span><span class="s2">)</span>
+
+<span class="s1">print</span><span class="s2">(</span><span class="s5">&quot;Welcome to WGUPS delivery management program v1!&quot;</span><span class="s2">)</span>
+
+<span class="s3"># Loads trucks 1 and 2 while holding late arrivals and package id 9 which gets an updated address at 10:20 am</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Trucks 1 and 2 are being loaded...'</span><span class="s2">)</span>
+<span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s1">package_table</span><span class="s2">.</span><span class="s1">size </span><span class="s2">+ </span><span class="s4">1</span><span class="s2">):  </span><span class="s3"># O(n) time complexity for entire loop</span>
+    <span class="s1">package </span><span class="s2">= </span><span class="s1">package_table</span><span class="s2">.</span><span class="s1">get_package</span><span class="s2">(</span><span class="s1">i</span><span class="s2">)  </span><span class="s3"># O(1) time complexity finding object by key in the HashTable</span>
+    <span class="s3"># Loads only packages that are at the Hub</span>
+    <span class="s0">if </span><span class="s1">package</span><span class="s2">.</span><span class="s1">delivery_status </span><span class="s2">== </span><span class="s1">DeliveryStatus</span><span class="s2">.</span><span class="s1">WAREHOUSE</span><span class="s2">:</span>
+        <span class="s3"># Special cases are loaded on truck 2</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">package</span><span class="s2">.</span><span class="s1">special_notes </span><span class="s2">== </span><span class="s5">'Can only be on truck 2' </span><span class="s0">or </span><span class="s5">'Must be delivered with' </span><span class="s0">in </span><span class="s1">package</span><span class="s2">.</span><span class="s1">special_notes</span>
+                <span class="s0">or </span><span class="s1">package</span><span class="s2">.</span><span class="s1">delivery_deadline </span><span class="s2">&lt; </span><span class="s1">timedelta</span><span class="s2">(</span><span class="s1">hours</span><span class="s2">=</span><span class="s4">12</span><span class="s2">)):</span>
+            <span class="s0">if </span><span class="s1">truck2</span><span class="s2">.</span><span class="s1">package_count </span><span class="s2">&lt; </span><span class="s4">16</span><span class="s2">:</span>
+                <span class="s1">truck2</span><span class="s2">.</span><span class="s1">load_package</span><span class="s2">(</span><span class="s1">package</span><span class="s2">)</span>
+        <span class="s3"># Packages that need time before delivery are designated to truck 3 (delayed packages cannot be loaded yet)</span>
+        <span class="s0">elif </span><span class="s1">package</span><span class="s2">.</span><span class="s1">special_notes </span><span class="s2">== </span><span class="s5">'Wrong address listed'</span><span class="s2">:</span>
+            <span class="s1">truck3</span><span class="s2">.</span><span class="s1">load_package</span><span class="s2">(</span><span class="s1">package</span><span class="s2">)</span>
+        <span class="s3"># Trucks 1 and 2 are filled to their capacity of 16 packages</span>
+        <span class="s0">else</span><span class="s2">:</span>
+            <span class="s0">if </span><span class="s1">truck1</span><span class="s2">.</span><span class="s1">package_count </span><span class="s2">&lt; </span><span class="s4">16</span><span class="s2">:</span>
+                <span class="s1">truck1</span><span class="s2">.</span><span class="s1">load_package</span><span class="s2">(</span><span class="s1">package</span><span class="s2">)</span>
+            <span class="s0">elif </span><span class="s1">truck2</span><span class="s2">.</span><span class="s1">package_count </span><span class="s2">&lt; </span><span class="s4">10</span><span class="s2">:</span>
+                <span class="s1">truck2</span><span class="s2">.</span><span class="s1">load_package</span><span class="s2">(</span><span class="s1">package</span><span class="s2">)</span>
+
+<span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s4">1</span><span class="s2">)       </span><span class="s3"># Creates a delay to simulate work being done</span>
+<span class="s3"># Trucks 1 and 2 run their routes using nearest neighbor algorithm</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Truck 1 is departing Hub.'</span><span class="s2">)</span>
+<span class="s1">truck1</span><span class="s2">.</span><span class="s1">deliver_all_packages</span><span class="s2">(</span><span class="s1">distance_table</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Truck 2 is departing Hub.'</span><span class="s2">)</span>
+<span class="s1">truck2</span><span class="s2">.</span><span class="s1">deliver_all_packages</span><span class="s2">(</span><span class="s1">distance_table</span><span class="s2">)</span>
+
+<span class="s3"># Trucks 1 and 2 return to the hub</span>
+<span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s4">1</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Truck 2 has returned to the hub.'</span><span class="s2">)</span>
+<span class="s1">truck2</span><span class="s2">.</span><span class="s1">return_to_hub</span><span class="s2">(</span><span class="s1">distance_table</span><span class="s2">)</span>
+<span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s4">1</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Truck 1 has returned to the hub.'</span><span class="s2">)</span>
+<span class="s1">truck1</span><span class="s2">.</span><span class="s1">return_to_hub</span><span class="s2">(</span><span class="s1">distance_table</span><span class="s2">)</span>
+
+<span class="s3"># The time is at least 10:20 so package id 9 can have its address updated</span>
+<span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s4">1</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Package ID 9 had had an address correction.'</span><span class="s2">)</span>
+<span class="s1">package9 </span><span class="s2">= </span><span class="s1">package_table</span><span class="s2">.</span><span class="s1">get_package</span><span class="s2">(</span><span class="s4">9</span><span class="s2">)  </span><span class="s3"># Update to '410 S State St, Salt Lake City, UT 84111'</span>
+<span class="s1">package9</span><span class="s2">.</span><span class="s1">address </span><span class="s2">= </span><span class="s5">'410 S State St'</span>
+<span class="s1">package9</span><span class="s2">.</span><span class="s1">zip </span><span class="s2">= </span><span class="s5">'84111'</span>
+
+<span class="s3"># Truck 3 gets a driver and transfers the time from the earliest returning truck</span>
+<span class="s1">truck3</span><span class="s2">.</span><span class="s1">set_timer</span><span class="s2">(</span><span class="s1">truck2</span><span class="s2">.</span><span class="s1">get_timer</span><span class="s2">())</span>
+
+<span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s4">1</span><span class="s2">)</span>
+
+<span class="s3"># Loads truck 3 with packages that are now ready</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Truck 3 is being loaded...'</span><span class="s2">)</span>
+<span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s1">package_table</span><span class="s2">.</span><span class="s1">size </span><span class="s2">+ </span><span class="s4">1</span><span class="s2">):</span>
+    <span class="s1">package </span><span class="s2">= </span><span class="s1">package_table</span><span class="s2">.</span><span class="s1">get_package</span><span class="s2">(</span><span class="s1">i</span><span class="s2">)</span>
+    <span class="s0">if </span><span class="s1">package</span><span class="s2">.</span><span class="s1">delivery_status </span><span class="s2">== </span><span class="s1">DeliveryStatus</span><span class="s2">.</span><span class="s1">WAREHOUSE</span><span class="s2">:</span>
+        <span class="s1">truck3</span><span class="s2">.</span><span class="s1">load_package</span><span class="s2">(</span><span class="s1">package</span><span class="s2">)</span>
+
+<span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s4">1</span><span class="s2">)</span>
+<span class="s3"># Truck 3 runs route and returns to Hub</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Truck 3 is departing Hub'</span><span class="s2">)</span>
+<span class="s1">truck3</span><span class="s2">.</span><span class="s1">deliver_all_packages</span><span class="s2">(</span><span class="s1">distance_table</span><span class="s2">)</span>
+<span class="s1">time</span><span class="s2">.</span><span class="s1">sleep</span><span class="s2">(</span><span class="s4">1</span><span class="s2">)</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Truck 3 has returned to the Hub.'</span><span class="s2">)</span>
+<span class="s1">truck3</span><span class="s2">.</span><span class="s1">return_to_hub</span><span class="s2">(</span><span class="s1">distance_table</span><span class="s2">)</span>
+
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'All trucks have completed their deliveries and returned to the Hub'</span><span class="s2">)</span>
+<span class="s1">total_miles </span><span class="s2">= </span><span class="s1">truck1</span><span class="s2">.</span><span class="s1">miles_driven </span><span class="s2">+ </span><span class="s1">truck2</span><span class="s2">.</span><span class="s1">miles_driven </span><span class="s2">+ </span><span class="s1">truck3</span><span class="s2">.</span><span class="s1">miles_driven</span>
+<span class="s1">print</span><span class="s2">(</span><span class="s5">'Total miles driven by all trucks: '</span><span class="s2">, </span><span class="s1">total_miles</span><span class="s2">)</span>
+<span class="s0">while True</span><span class="s2">:</span>
+    <span class="s1">Ui</span><span class="s2">.</span><span class="s1">time_query_all_packages</span><span class="s2">(</span><span class="s1">truck1</span><span class="s2">, </span><span class="s1">truck2</span><span class="s2">, </span><span class="s1">truck3</span><span class="s2">)</span>
+</pre>
+</body>
+</html>
